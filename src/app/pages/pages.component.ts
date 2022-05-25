@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { SettingService } from '../service/setting.service';
+
+declare function customInitFunctions():void;
 
 @Component({
   selector: 'app-pages',
@@ -8,9 +11,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PagesComponent implements OnInit {
 
-  constructor() { }
+  // public linkTheme = document.querySelector("#theme");
+
+  constructor(private settingService: SettingService) { }
 
   ngOnInit(): void {
+    //  Toma el valor de theme del localStorage. Si no lo encuentra, pone el thema a megna.
+    // const url = localStorage.getItem('theme') || `./assets/css/colors/megna-dark.css`;
+    // this.settingService.linkTheme?.setAttribute('href',url);
+    customInitFunctions();
   }
 
 }
