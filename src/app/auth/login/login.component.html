@@ -10,8 +10,10 @@
     <div class="card-body">
       <form
         class="form-horizontal form-material"
-        (submit)="login()"
         id="loginform"
+        autocomplete="off"
+        (ngSubmit)="login()"
+        [formGroup]="loginForm"
       >
         <a href="javascript:void(0)" class="text-center db"
           ><img src="../assets/images/logo-icon.png" alt="Home" /><br /><img
@@ -22,9 +24,9 @@
           <div class="col-xs-12">
             <input
               class="form-control"
-              type="text"
-              required=""
-              placeholder="Username"
+              type="email"
+              placeholder="Email"
+              formControlName="email"
             />
           </div>
         </div>
@@ -33,7 +35,7 @@
             <input
               class="form-control"
               type="password"
-              required=""
+              formControlName="password"
               placeholder="Password"
             />
           </div>
@@ -44,6 +46,7 @@
               <input
                 id="checkbox-signup"
                 type="checkbox"
+                formControlName="remember"
                 class="filled-in chk-col-light-blue"
               />
               <label for="checkbox-signup"> Remember me </label>
@@ -91,7 +94,7 @@
         <div class="form-group m-b-0">
           <div class="col-sm-12 text-center">
             Don't have an account?
-            <a href="pages-register2.html" class="text-primary m-l-5"
+            <a routerLink="/register" class="text-primary m-l-5"
               ><b>Sign Up</b></a
             >
           </div>
