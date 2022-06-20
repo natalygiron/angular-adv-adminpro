@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -7,6 +7,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { LoginForm } from '../interfaces/login.interface';
 import { registerForm } from '../interfaces/register-form.interface';
+import { Usuario } from '../models/usuario.model';
 
 const base_url = environment.base_url;
 
@@ -15,8 +16,18 @@ const base_url = environment.base_url;
 })
 export class UsuarioService {
 
+  public usuario: Usuario = new Usuario('nataly','nataly@gmail.com');
+
   constructor( private http: HttpClient,
                private router: Router) { }
+
+  get token(): string{
+    return localStorage.getItem('token') || '';
+  }
+
+  get uid(): string{
+    return this.usuario.uid || '';
+  }
 
   logout() {
     localStorage.removeItem('token');
@@ -24,17 +35,23 @@ export class UsuarioService {
   }
 
   validarToken(){
-    const token = localStorage.getItem('token') || '';
 
     return this.http.get(`${base_url}/login/renew`, {
       headers: {
-        'x-token': token
+        'x-token': this.token
       }
     }).pipe(
-      tap( (resp: any) => {
+      map( (resp: any) => {
+
+        const {
+          email, google, nombre, rol, img, uid 
+        } = resp.usuario;
+
+        this.usuario = new Usuario(nombre,email, '', google, img, rol, uid)
         localStorage.setItem( 'token', resp.token )
+        return true;
       }),
-      map( resp => true),
+      // map( resp => true),
       catchError( error => of(false) )
     );
 
@@ -47,6 +64,18 @@ export class UsuarioService {
                     localStorage.setItem('token', resp.token )
                   })
                 );
+  }
+
+  actualizarPerfil( data: {email: string, nombre: string, role: string}) {
+
+    data = { ...data, role: 'USER_ROLE' };
+
+    return this.http.put(`${base_url}/usuarios/${this.uid}`, data, {
+      headers: {
+        'x-token': this.token
+      }
+    })
+
   }
 
   login( formData: LoginForm ) {

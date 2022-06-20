@@ -9,3 +9,7 @@
 #themecolors .selector, .cursor  {
   cursor: pointer;
 }
+
+.img-avatar {
+  max-height: 200px;
+}
