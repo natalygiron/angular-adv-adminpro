@@ -77,8 +77,8 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     }
 
     return this.busquedaService.buscar('usuarios',termino)
-                    .subscribe( resp =>{
-                      this.usuarios = resp;
+                    .subscribe( resp =>{ // para solucionar tipo tambien se puede con (resp: Usuario[])
+                      this.usuarios = resp || Usuario[''];
                     });
   }
 
@@ -100,12 +100,12 @@ export class UsuariosComponent implements OnInit, OnDestroy {
       if (result.value) {
         this.usuarioSerivce.eliminarUsuario(usuario)
             .subscribe( resp => {
-              this.cargarUsuarios();
               Swal.fire(
                 'Eliminado!',
                 `El usuario ${usuario.nombre} ha sido eliminado`,
                 'success'
-              );
+                );
+                this.cargarUsuarios();
 
             })
         

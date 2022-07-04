@@ -8,7 +8,7 @@ const base_url = environment.base_url;
 })
 export class ModalImagenService {
 
-  public _ocultarModal: boolean = false;
+  public _ocultarModal: boolean = true;
   public tipo: string | any;
   public id: string = '';
   public img:  string | any;
@@ -31,10 +31,9 @@ export class ModalImagenService {
 
     if( img.includes('https') ){
       this.img = img;
-      console.log('uwu');
     } else {
       this.img = `${base_url}/uploads/${tipo}/${img}`;
-      console.log('owo ', this.img);
+      // console.log('owo ', this.img);
     }
 
   }
